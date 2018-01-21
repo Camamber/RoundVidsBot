@@ -20,6 +20,7 @@ class WebhookServer(object):
            cherrypy.request.headers['content-type'] == 'application/json':
             length = int(cherrypy.request.headers['content-length'])
             json_string = cherrypy.request.body.read(length)
+            print(json_string)
             bot.update(json_string)
         else:
             raise cherrypy.HTTPError(403)

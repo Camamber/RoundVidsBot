@@ -15,7 +15,7 @@ class Bot:
         data = json.loads(json_string)
         print(data['message']['chat']['username'],':',data['message']['text'])
         if data['message']['chat']['id'] in self.users and data['message']['message_id'] != self.users[data['message']['chat']['id']].get_last():
-            users[data['message']['chat']['id']].set_last(data['message']['message_id'])
+            self.users[data['message']['chat']['id']].set_last(data['message']['message_id'])
             if data['message']['text'] == '/start':
                 self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         elif data['message']['chat']['id'] not in self.users:
