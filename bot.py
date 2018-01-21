@@ -14,17 +14,32 @@ class Bot:
     def update(self, json_string):
         data = json.loads(json_string)
         print(data['message']['chat']['username'],':',data['message']['text'])
-        if data['message']['chat']['id'] in self.users and data['message']['message_id'] != self.users[data['message']['chat']['id']].get_last():
-            self.users[data['message']['chat']['id']].set_last(data['message']['message_id'])
-            if data['message']['text'] == '/start':
-                self.send_msg(data['message']['chat']['id'], 'Welcome:)')
-        elif data['message']['chat']['id'] not in self.users:
-            self.users[data['message']['chat']['id']] = User(data['message']['message_id'])
-            if data['message']['text'] == '/start':
-                self.send_msg(data['message']['chat']['id'], 'Welcome:)')
-        
+        if data['message']['chat']['id'] in self.users:
+            self.exec_command(user[data['message']['chat']['id']], data['message']['text'])
+        else:
+            self.new_user(data)         
 
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text}
         response = requests.post(self.url.format(self.token,'sendMessage'), data=params)
         return response
+
+    def new_user(self, data):
+        if data['message']['text'] == '/start':
+            self.users[data['message']['chat']['id']] = User(data['message']['chat']['id'])
+            self.send_msg(data['message']['chat']['id'], 'Enter token of your posting bot:')      
+        else:
+            self.send_msg(data['message']['chat']['id'], 'Idk who are you man. Try /start to config me:)')
+
+    def exec_command(self, user, command):
+        if user.state == 'token':
+            if self.check_token(command):
+                user.token=command
+            else:
+                send_msg(user._id, 'Incorrect token')
+
+    def check_token(token):
+        response = requests.post(self.url.format(token,'getMe'))
+        return response['ok']
+                
+        
