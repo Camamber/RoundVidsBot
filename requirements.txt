@@ -8,7 +8,6 @@ more-itertools==4.0.1
 portend==2.2
 post==0.0.25
 public==0.0.64
-pypiwin32==220
 pytz==2017.3
 query-string==0.0.27
 requests==2.18.4
