@@ -20,5 +20,5 @@ class Bot:
 
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text}
-        response = requests.post(url.format(token,'sendMessage'), data=params)
+        response = requests.post(self.url.format(self.token,'sendMessage'), data=params)
         return response
