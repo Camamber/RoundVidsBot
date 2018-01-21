@@ -40,7 +40,6 @@ class Bot:
 
     def check_token(self, token):
         print(token)
-        print(k)
         response = requests.post(self.url.format(token,'getMe'))
         return response['ok']
                 
