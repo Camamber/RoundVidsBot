@@ -33,12 +33,14 @@ class Bot:
 
     def exec_command(self, user, command):
         if user.state == 'token':
-            if self.check_token(str(command)):
+            if self.check_token(command):
                 user.token=command
             else:
                 send_msg(user._id, 'Incorrect token')
 
-    def check_token(token):
+    def check_token(token,k):
+        print(token)
+        print(k)
         response = requests.post(self.url.format(token,'getMe'))
         return response['ok']
                 
