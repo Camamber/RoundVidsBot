@@ -33,6 +33,8 @@ class Bot:
 
     def exec_command(self, user, command):
         if user.state == 'token':
+            print(command[0])
+            print(command[1])
             if self.check_token(str(command[0],':', command[1])):
                 user.token=command
             else:
