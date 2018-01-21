@@ -15,7 +15,7 @@ class Bot:
         data = json.loads(json_string)
         print(data['message']['chat']['username'],':',data['message']['text'])
         if data['message']['chat']['id'] in self.users:
-            self.exec_command(user[data['message']['chat']['id']], data['message']['text'])
+            self.exec_command(users[data['message']['chat']['id']], data['message']['text'])
         else:
             self.new_user(data)         
 
