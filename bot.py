@@ -41,6 +41,6 @@ class Bot:
     def check_token(self, token):
         print(token)
         response = requests.post(self.url.format(token,'getMe'))
-        return responsejson()['ok']
+        return response.json()['ok']
                 
         
