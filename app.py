@@ -1,5 +1,6 @@
 import cherrypy
 import os
+from bot import Bot
 
 API_TOKEN = '543482719:AAGSzOTxA8AEoYIU8h8IAVfAlTHWbLLkRb0'
 
@@ -15,15 +16,14 @@ class WebhookServer(object):
     @cherrypy.expose
     def index(self):
         if 'content-length' in cherrypy.request.headers and \
-          'content-type' in cherrypy.request.headers and \
-            cherrypy.request.headers['content-type'] == 'application/json':
+           'content-type' in cherrypy.request.headers and \
+           cherrypy.request.headers['content-type'] == 'application/json':
             length = int(cherrypy.request.headers['content-length'])
-            print(length)
             json_string = cherrypy.request.body.read(length)
-            print(json_string)
-            return json_string
+            bot.update(json_string)
         else:
-            return '<h1>Xyi</h1>'
+            raise cherrypy.HTTPError(403)
+
 
 config = {
     'global': {
@@ -31,5 +31,5 @@ config = {
         'server.socket_port': int(os.environ.get('PORT', WEBHOOK_PORT)),
     }
 }
-
+bot = Bot()
 cherrypy.quickstart(WebhookServer(), WEBHOOK_URL_PATH, config=config)
