@@ -18,6 +18,10 @@ class Bot:
             users[data['message']['chat']['id']].set_last(data['message']['chat']['message_id'])
             if data['message']['text'] == '/start':
                 self.send_msg(data['message']['chat']['id'], 'Welcome:)')
+        elif data['message']['chat']['id'] not in self.users:
+            self.user[data['message']['chat']['id']] = User(data['message']['chat']['message_id'])
+            if data['message']['text'] == '/start':
+                self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         
 
     def send_msg(self, chat, text):
