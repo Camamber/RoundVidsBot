@@ -19,7 +19,7 @@ class Bot:
             if data['message']['text'] == '/start':
                 self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         elif data['message']['chat']['id'] not in self.users:
-            self.user[data['message']['chat']['id']] = User(data['message']['message_id'])
+            self.users[data['message']['chat']['id']] = User(data['message']['message_id'])
             if data['message']['text'] == '/start':
                 self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         
