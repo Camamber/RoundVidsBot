@@ -14,7 +14,7 @@ class Bot:
     def update(self, json_string):
         data = json.loads(json_string)
         print(data['message']['chat']['username'],':',data['message']['text'])
-        if data['message']['chat']['id'] in users and data['message']['chat']['message_id'] != users[data['message']['chat']['id']].get_last():
+        if data['message']['chat']['id'] in self.users and data['message']['chat']['message_id'] != self.users[data['message']['chat']['id']].get_last():
             users[data['message']['chat']['id']].set_last(data['message']['chat']['message_id'])
             if data['message']['text'] == '/start':
                 self.send_msg(data['message']['chat']['id'], 'Welcome:)')
