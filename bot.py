@@ -6,16 +6,18 @@ class Bot:
     token = '543482719:AAGSzOTxA8AEoYIU8h8IAVfAlTHWbLLkRb0'
     url = 'https://api.telegram.org/bot{0}/{1}'
     state= False
-    users = [];
+    users = {};
 
     def __init__(self):
         print(User().lol())
 
     def update(self, json_string):
         data = json.loads(json_string)
-        if data['message']['text'] == '/start':
-            print(data['message']['chat']['username'],':',data['message']['text'])
-            self.send_msg(data['message']['chat']['id'], 'Welcome:)')
+        print(data['message']['chat']['username'],':',data['message']['text'])
+        if data['message']['chat']['id'] in users && data['message']['chat']['message_id'] != users[data['message']['chat']['id']].get_last():
+            users[data['message']['chat']['id']].set_last(data['message']['chat']['message_id'])
+            if data['message']['text'] == '/start':
+                self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         
 
     def send_msg(self, chat, text):
