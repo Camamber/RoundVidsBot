@@ -36,7 +36,7 @@ class Bot:
             if self.check_token(command):
                 user.token=command
             else:
-                send_msg(user._id, 'Incorrect token')
+                self.send_msg(user._id, 'Incorrect token. Try again')
 
     def check_token(self, token):
         print(token)
