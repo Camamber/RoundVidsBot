@@ -11,8 +11,8 @@ class Bot:
     def __init__(self):
         print(User().lol())
 
-    def update(self, json):
-        data = json.loads(json)
+    def update(self, json_string):
+        data = json.load(json_string)
         if data['message']['text'] == '/start':
             print(data['message']['chat']['username'],':',data['message']['text'])
             send_msg(data['message']['chat']['id'], 'Welcome:)')
