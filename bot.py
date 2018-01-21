@@ -12,7 +12,7 @@ class Bot:
         print(User().lol())
 
     def update(self, json):
-        data = json.load(json)
+        data = json.loads(json)
         if data['message']['text'] == '/start':
             print(data['message']['chat']['username'],':',data['message']['text'])
             send_msg(data['message']['chat']['id'], 'Welcome:)')
