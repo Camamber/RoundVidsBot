@@ -15,7 +15,7 @@ class Bot:
         data = json.loads(json_string)
         if data['message']['text'] == '/start':
             print(data['message']['chat']['username'],':',data['message']['text'])
-            send_msg(data['message']['chat']['id'], 'Welcome:)')
+            self.send_msg(data['message']['chat']['id'], 'Welcome:)')
         
 
     def send_msg(self, chat, text):
