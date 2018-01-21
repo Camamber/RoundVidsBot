@@ -38,7 +38,7 @@ class Bot:
             else:
                 send_msg(user._id, 'Incorrect token')
 
-    def check_token(token,k):
+    def check_token(self, token):
         print(token)
         print(k)
         response = requests.post(self.url.format(token,'getMe'))
