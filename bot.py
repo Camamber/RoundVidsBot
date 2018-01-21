@@ -9,7 +9,7 @@ class Bot:
     users = {};
 
     def __init__(self):
-        print(User().lol())
+        print('Hi. I`m ready')
 
     def update(self, json_string):
         data = json.loads(json_string)
