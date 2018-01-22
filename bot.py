@@ -38,9 +38,12 @@ class Bot:
                 self.add_channel(user, command['text'])
             elif user.state == 'sleep':
                 self.sleep(user, command['text'])
-        elif 'document' in command or 'video' in command:
+        elif 'document' in command:
             if user.state == 'video_adding':
                 self.add_video(command['document'])
+        or 'video' in command:
+            if user.state == 'video_adding':
+                self.add_video(command['video'])
             
             
     def new_user(self, data):
@@ -66,7 +69,7 @@ class Bot:
         response = requests.post(self.URL.format(user.token, 'getChat'), params)
         if response.json()['ok']:
             user.add_channel(channel)
-            user.state='working'
+            user.state='video_adding'
             self.send_msg(user._id, 'Chat successfully added.')
         else:
             self.send_msg(user._id, 'There is no such chat or your bot are not in it.')
