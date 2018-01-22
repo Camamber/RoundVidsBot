@@ -40,10 +40,10 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['document'], 'document')
+                self.add_video(user, command['document'])
         elif 'video' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['video'], 'video')
+                self.add_video(user, command['video'])
             
             
     def new_user(self, data):
@@ -82,9 +82,9 @@ class Bot:
             user.state='channel_adding'
 
 
-    def add_video(self, user, document, d_type):
+    def add_video(self, user, document):
         if document['mime_type'] == 'video/mp4':
-            params = {'file_id': document[d_type]['file_id']}
+            params = {'file_id': document['file_id']}
             response = requests.post(self.URL.format(TOKEN, 'getFile'), params)
             if response.json()['ok']:
                 print(self.download_file(response.json()['result']['file_path']))
