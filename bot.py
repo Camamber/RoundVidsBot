@@ -14,11 +14,12 @@ class Bot:
 
     def update(self, json_string):
         data = json.loads(json_string)
-        print(data['message']['chat']['username'],':',data['message'])
-        if data['message']['chat']['id'] in self.users:
-            self.exec_command(self.users[data['message']['chat']['id']], data['message'])
-        else:
-            self.new_user(data)         
+        if 'text' in data['message'] or 'document' in data['message'] or 'video' in data['message']:
+            print(data['message']['chat']['username'],':',data['message'])
+            if data['message']['chat']['id'] in self.users:
+                self.exec_command(self.users[data['message']['chat']['id']], data['message'])
+            else:
+                self.new_user(data)         
 
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text}
@@ -52,7 +53,7 @@ class Bot:
         if response.json()['ok']:
             user.token=token
             user.state='channel_adding'
-            self.send_msg(user._id, 'Token successfully installed.')
+            self.send_msg(user._id, 'Token successfully installed. Now add channel. Simply type *valid* @channelname')
         else:
             self.send_msg(user._id, 'Incorrect token. Try again.')
 
@@ -65,6 +66,7 @@ class Bot:
             self.send_msg(user._id, 'Chat successfully added.')
         else:
             self.send_msg(user._id, 'There is no such chat or your bot are not in it.')
+        
 
     def sleep(self, user, command):
         if command == '/token':
