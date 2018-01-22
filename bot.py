@@ -106,7 +106,7 @@ class Bot:
     
     def round_it(self,user, file):
         file={'video_note': open(file, 'rb')}
-        params = {'chat_id': user._id, 'text': text, 'parse_mode':'HTML'}
+        params = {'chat_id': user._id}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
         
