@@ -83,7 +83,7 @@ class Bot:
 
 
     def add_video(self, user, document):
-        if document['type'] == 'video/mp4':
+        if document['mime_type'] == 'video/mp4':
             self.send_msg(user._id, 'Nice Shoot')
         else:
             self.send_msg(user._id, 'Hey whait a minute it isnt video')
