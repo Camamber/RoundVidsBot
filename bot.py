@@ -40,10 +40,10 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                self.add_video(command['document'])
+                self.add_video(user, command['document'])
         elif 'video' in command:
             if user.state == 'video_adding':
-                self.add_video(command['video'])
+                self.add_video(user, command['video'])
             
             
     def new_user(self, data):
