@@ -53,7 +53,7 @@ class Bot:
         if response.json()['ok']:
             user.token=token
             user.state='channel_adding'
-            self.send_msg(user._id, 'Token successfully installed. Now add channel. Simply type *valid* @channelname')
+            self.send_msg(user._id, 'Token successfully installed. Now add channel. Simply type valid @channelname')
         else:
             self.send_msg(user._id, 'Incorrect token. Try again.')
 
