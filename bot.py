@@ -29,6 +29,7 @@ class Bot:
 
 
     def exec_command(self, user, command):
+        self.send_msg(user._id,'daun')
         if 'text' not in command:
             if user.state == 'token_adding':
                 self.add_token(user, command['text'])
@@ -36,9 +37,6 @@ class Bot:
                 self.add_channel(user, command['text'])
             elif user.state == 'sleep':
                 self.sleep(user, command['text'])
-            else:
-                self.send_msg(user._id,'daun')
-                
         elif 'document' in command or 'video' in command:
             if user.state == 'video_adding':
                 self.add_video(command['document'])
