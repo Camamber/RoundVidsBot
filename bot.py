@@ -94,7 +94,7 @@ class Bot:
     def download_file(self, file_path):
         filename = file_path.split('/')[-1]
         url = 'https://api.telegram.org/file/bot{0}/{1}'
-        r = requests.get(url.format(TOKEN,file_path))
+        r = requests.get(url.format(self.TOKEN,file_path))
         with open(filename, 'wb') as f:  
             f.write(r.content)
         return filename
