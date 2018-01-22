@@ -41,7 +41,7 @@ class Bot:
         elif 'document' in command:
             if user.state == 'video_adding':
                 self.add_video(command['document'])
-        or 'video' in command:
+        elif 'video' in command:
             if user.state == 'video_adding':
                 self.add_video(command['video'])
             
