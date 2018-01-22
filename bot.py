@@ -37,7 +37,7 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                self.add_video(command['document')
+                self.add_video(command['document'])
             
             
     def new_user(self, data):
@@ -68,7 +68,7 @@ class Bot:
 
     def sleep(self, user, command):
         if command == '/token':
-            user.state'token_adding'
+            user.state='token_adding'
         elif command == '/channels':
             user.state='channel_adding'
 
