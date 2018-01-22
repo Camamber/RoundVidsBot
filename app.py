@@ -21,10 +21,10 @@ class WebhookServer(object):
             length = int(cherrypy.request.headers['content-length'])
             json_string = cherrypy.request.body.read(length)
             print(json_string)
-            #bot.update(json_string)
+            bot.update(json_string)
         else:
-            return 'xui'
-            #raise cherrypy.HTTPError(403)
+            #return 'xui'
+            raise cherrypy.HTTPError(403)
 
 
 config = {
@@ -33,5 +33,5 @@ config = {
         'server.socket_port': int(os.environ.get('PORT', WEBHOOK_PORT)),
     }
 }
-#bot = Bot(API_TOKEN)
+bot = Bot(API_TOKEN)
 cherrypy.quickstart(WebhookServer(), WEBHOOK_URL_PATH, config=config)
