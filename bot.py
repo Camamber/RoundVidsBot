@@ -40,10 +40,10 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['document'])
+                self.add_video(user, command['document'], 'document')
         elif 'video' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['video'])
+                self.add_video(user, command['video'], 'video')
             
             
     def new_user(self, data):
@@ -82,12 +82,20 @@ class Bot:
             user.state='channel_adding'
 
 
-    def add_video(self, user, document):
+    def add_video(self, user, document, d_type):
         if document['mime_type'] == 'video/mp4':
-            self.send_msg(user._id, 'Nice Shoot')
+            params = {'file_id': document[d_type]['file_id']}
+            response = requests.post(self.URL.format(TOKEN, 'getFile'), params)
+            if response.json()['ok']:
+                print(self.download_file(response.json()['result']['file_path']))
         else:
             self.send_msg(user._id, 'Hey whait a minute it isnt video')
-                               
-            
-            
-                
+
+    def download_file(self, file_path):
+        filename = file_path.split('/')[-1]
+        url = 'https://api.telegram.org/file/bot{0}/{1}'
+        r = requests.get(url.format(TOKEN,file_path))
+        with open(filename, 'wb') as f:  
+            f.write(r.content)
+        return filename
+
