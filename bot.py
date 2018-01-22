@@ -22,7 +22,7 @@ class Bot:
 
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text}
-        response = requests.post(self.url.format(self.TOKEN,'sendMessage'), data=params)
+        response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
         return response
 
 
@@ -48,7 +48,7 @@ class Bot:
             self.send_msg(data['message']['chat']['id'], 'Idk who are you man. Try /start to config me:)')
 
     def add_token(self, user, token):
-        response = requests.post(self.url.format(token, 'getMe'))
+        response = requests.post(self.URL.format(token, 'getMe'))
         if response.json()['ok']:
             user.token=token
             user.state='channel_adding'
@@ -58,7 +58,7 @@ class Bot:
 
     def add_channel(self, user, channel):
         params = {'chat_id': channel}
-        response = requests.post(self.url.format(user.token, 'getChat'), params)
+        response = requests.post(self.URL.format(user.token, 'getChat'), params)
         if response.json()['ok']:
             user.add_channel(channel)
             user.state='working'
