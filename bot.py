@@ -41,7 +41,7 @@ class Bot:
             
             
     def new_user(self, data):
-        if data['message']['text'] == '/start':
+        if 'text' in data['message'] and data['message']['text'] == '/start':
             self.users[data['message']['chat']['id']] = User(data['message']['chat']['id'])
             self.send_msg(data['message']['chat']['id'], 'Enter token of your posting bot:')      
         else:
