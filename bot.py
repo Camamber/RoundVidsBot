@@ -14,6 +14,7 @@ class Bot:
 
     def update(self, json_string):
         data = json.loads(json_string)
+        print('------------------------------\n',data,'\n------------------------------')
         if 'text' in data['message'] or 'document' in data['message'] or 'video' in data['message']:
             print(data['message']['chat']['username'],':',data['message'])
             if data['message']['chat']['id'] in self.users:
@@ -22,7 +23,7 @@ class Bot:
                 self.new_user(data)         
 
     def send_msg(self, chat, text):
-        params = {'chat_id': chat, 'text': text}
+        params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
         response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
         return response
 
@@ -48,14 +49,16 @@ class Bot:
         else:
             self.send_msg(data['message']['chat']['id'], 'Idk who are you man. Try /start to config me:)')
 
+
     def add_token(self, user, token):
         response = requests.post(self.URL.format(token, 'getMe'))
         if response.json()['ok']:
             user.token=token
             user.state='channel_adding'
-            self.send_msg(user._id, 'Token successfully installed.')
+            self.send_msg(user._id, 'Token successfully installed. Now add channel. Simply type <b>valid</b> @channelname')
         else:
             self.send_msg(user._id, 'Incorrect token. Try again.')
+
 
     def add_channel(self, user, channel):
         params = {'chat_id': channel}
