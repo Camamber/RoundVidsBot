@@ -2,7 +2,7 @@ import cherrypy
 import os
 from bot import Bot
 
-API_TOKEN = '543482719:AAGSzOTxA8AEoYIU8h8IAVfAlTHWbLLkRb0'
+API_TOKEN = '456472998:AAGuE397SZVFgX5JIV022BFe6XQzzdDn_7Q'
 
 WEBHOOK_HOST = '<ip/host where the bot is running>'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
@@ -32,5 +32,5 @@ config = {
         'server.socket_port': int(os.environ.get('PORT', WEBHOOK_PORT)),
     }
 }
-bot = Bot()
+bot = Bot(API_TOKEN)
 cherrypy.quickstart(WebhookServer(), WEBHOOK_URL_PATH, config=config)

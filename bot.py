@@ -3,13 +3,14 @@ import json
 import requests
 
 class Bot:
-    TOKEN = '543482719:AAGSzOTxA8AEoYIU8h8IAVfAlTHWbLLkRb0'
+    TOKEN = ''
     URL = 'https://api.telegram.org/bot{0}/{1}'
 
     state= False
     users = {};
 
-    def __init__(self):
+    def __init__(self, TOKEN):
+        self.TOKEN=TOKEN
         print('Hi. I`m ready')
 
     def update(self, json_string):
