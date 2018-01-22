@@ -29,8 +29,7 @@ class Bot:
 
 
     def exec_command(self, user, command):
-        self.send_msg(user._id,'daun')
-        if 'text' not in command:
+        if 'text' in command:
             if user.state == 'token_adding':
                 self.add_token(user, command['text'])
             elif user.state == 'channel_adding':
@@ -51,7 +50,6 @@ class Bot:
 
     def add_token(self, user, token):
         response = requests.post(self.URL.format(token, 'getMe'))
-        print(response)
         if response.json()['ok']:
             user.token=token
             user.state='channel_adding'
