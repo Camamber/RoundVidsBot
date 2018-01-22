@@ -85,7 +85,7 @@ class Bot:
     def add_video(self, user, document):
         if document['mime_type'] == 'video/mp4':
             params = {'file_id': document['file_id']}
-            response = requests.post(self.URL.format(TOKEN, 'getFile'), params)
+            response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
             if response.json()['ok']:
                 print(self.download_file(response.json()['result']['file_path']))
         else:
