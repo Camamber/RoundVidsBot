@@ -84,12 +84,17 @@ class Bot:
 
     def add_video(self, user, document):
         if document['mime_type'] == 'video/mp4':
-            params = {'file_id': document['file_id']}
-            response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
-            if response.json()['ok']:
-                print(self.download_file(response.json()['result']['file_path']))
+            if document['width'] == document['width'] and document['duration']<=60:
+                params = {'file_id': document['file_id']}
+                response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
+                if response.json()['ok']:
+                    print(self.round_it(user, self.download_file(response.json()['result']['file_path'])))
+            elif document['width']!= document['width']:
+                self.send_msg(user._id, 'Video shoud be scaled 1:1')
+            elif document['duration']>60:
+                self.send_msg(user._id, 'Video shoud be up to one minute')
         else:
-            self.send_msg(user._id, 'Hey whait a minute it isnt video')
+            self.send_msg(user._id, 'Hey wait a minute it isnt video')
 
     def download_file(self, file_path):
         filename = file_path.split('/')[-1]
@@ -98,4 +103,10 @@ class Bot:
         with open(filename, 'wb') as f:  
             f.write(r.content)
         return filename
-
+    
+    def round_it(self,user, file):
+        file={'video_note': open(file, 'rb')}
+        params = {'chat_id': user._id, 'text': text, 'parse_mode':'HTML'}
+        response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
+        return response
+        
