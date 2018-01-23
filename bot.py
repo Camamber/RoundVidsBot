@@ -35,8 +35,6 @@ class Bot:
             
 
     def serialize(self, path):
-        if os.path.isfile(path):
-            os.remove(path)
         data = []
         for user in self.users:
             data.append(self.users[user].to_json())
