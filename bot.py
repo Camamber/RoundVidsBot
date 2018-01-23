@@ -12,6 +12,7 @@ class Bot:
 
     def __init__(self, TOKEN):
         self.TOKEN=TOKEN
+        self.deserialize('users.json')
         print('Hi. I`m ready')
 
     def __del__(self):
@@ -109,7 +110,10 @@ class Bot:
                 params = {'file_id': document['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
                 if response.json()['ok']:
-                    print(self.round_it(user, self.download_file(response.json()['result']['file_path'])))                
+                    filename=self.download_file(response.json()['result']['file_path'])
+                    print(self.round_it(user, file))
+                    if os.path.isfile(filename):
+                        os.remove(filename)
             elif document['width']!= document['width']:
                 self.send_msg(user._id, 'Video shoud be scaled 1:1')
             elif document['duration']>60:
