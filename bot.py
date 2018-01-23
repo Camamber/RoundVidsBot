@@ -14,11 +14,7 @@ class Bot:
         self.TOKEN=TOKEN
         self.deserialize('users.json')
         print('Hi. I`m ready')
-
-    def __del__(self):
-        print(Nooooo)
-        self.serialize('users.json')
-
+      
     def update(self, json_string):
         data = json.loads(json_string)
         print('------------------------------\n',data,'\n------------------------------')
@@ -94,7 +90,8 @@ class Bot:
         if response.json()['ok']:
             user.add_channel(channel)
             user.state='video_adding'
-            self.send_msg(user._id, 'Chat successfully added.')
+            self.send_msg(user._id, 'Chat successfully added. Now you can send me a video')
+            self.serialize('users.json')
         else:
             self.send_msg(user._id, 'There is no such chat or your bot are not in it.')
         
