@@ -3,13 +3,9 @@ class User:
     _id=''
     token=''
     channels=[]
-    
-    
-    def __init__(self, _id):
-        self.state = 'token_adding'
-        self._id=_id
 
-    def __init__(self, _id, state, token, channels):
+
+    def __init__(self, _id, state='token_adding', token='', channels=[]):
         self._id=_id
         self.state = state
         self.token=token
