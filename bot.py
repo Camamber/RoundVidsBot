@@ -128,7 +128,7 @@ class Bot:
         return filename
     
     def round_it(self,user, file_path):
-        file={'video_note': open(download_file(file_path), 'rb')}
+        file={'video_note': open(self.download_file(file_path), 'rb')}
         params = {'chat_id': user._id}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
