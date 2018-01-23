@@ -16,6 +16,7 @@ class Bot:
         print('Hi. I`m ready')
 
     def __del__(self):
+        print(Nooooo)
         self.serialize('users.json')
 
     def update(self, json_string):
@@ -41,6 +42,7 @@ class Bot:
         data = []
         for user in self.users:
             data.append(user.to_json)
+        print(data)
         json.dumps({'users':data}, separators=(',',':'))
         with open(path, 'w') as f:  
             f.write(json)
