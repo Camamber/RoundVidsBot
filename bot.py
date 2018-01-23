@@ -39,7 +39,7 @@ class Bot:
         for user in self.users:
             data.append(self.users[user].to_json())
         print(str({'users':data}))
-        with open(path, 'w') as f:  
+        with open(path, 'w+') as f:  
             f.write(json.dumps({'users':data}, separators=(',',':')))
 
         
