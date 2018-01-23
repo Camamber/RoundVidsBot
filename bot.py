@@ -30,6 +30,8 @@ class Bot:
             json.load(open(path, 'rb'))
             for user in json['users']:
                 self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
+        else:
+            print('xyi')
             
 
     def serialize(self, path):
