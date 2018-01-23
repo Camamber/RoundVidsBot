@@ -120,16 +120,18 @@ class Bot:
         filename = file_path.split('/')[-1]
         url = 'https://api.telegram.org/file/bot{0}/{1}'
         r = requests.get(url.format(self.TOKEN,file_path))
-        with open(filename, 'wb') as f:  
-            f.write(r.content)
-        return filename
+        #with open(filename, 'wb') as f:  
+        #    f.write(r.content)
+        #return filename
+        return r.content
     
     def round_it(self,user, file_path):
         filename = self.download_file(file_path)
-        file={'video_note': open(filename, 'rb')}
-        if os.path.isfile(filename):
-            print('lol')
-            os.remove(filename)
+        file={'video_note': filename}
+        #file={'video_note': open(filename, 'rb')}
+        #if os.path.isfile(filename):
+        #    print('lol')
+        #    os.remove(filename)
         params = {'chat_id': user._id}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
