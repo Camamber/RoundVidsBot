@@ -109,9 +109,6 @@ class Bot:
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
                 if response.json()['ok']:
                     print(self.round_it(user, response.json()['result']['file_path']))
-                    if os.path.isfile(filename):
-                        print('lol')
-                        os.remove(filename)
             elif document['width']!= document['width']:
                 self.send_msg(user._id, 'Video shoud be scaled 1:1')
             elif document['duration']>60:
@@ -128,7 +125,11 @@ class Bot:
         return filename
     
     def round_it(self,user, file_path):
-        file={'video_note': open(self.download_file(file_path), 'rb')}
+        filename = self.download_file(file_path)
+        if os.path.isfile(filename):
+            print('lol')
+            os.remove(filename)
+        file={'video_note': open(filename, 'rb')}
         params = {'chat_id': user._id}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
