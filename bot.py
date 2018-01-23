@@ -39,9 +39,8 @@ class Bot:
         for user in self.users:
             data.append(self.users[user].to_json())
         print(str({'users':data}))
-        json.dumps(str({'users':data}), separators=(',',':'))
         with open(path, 'w') as f:  
-            f.write(json)
+            f.write(json.dumps({'users':data}, separators=(',',':')))
 
         
     def send_msg(self, chat, text):
