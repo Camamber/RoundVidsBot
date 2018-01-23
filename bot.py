@@ -39,7 +39,7 @@ class Bot:
         for user in self.users:
             data.append(self.users[user].to_json())
         print(str({'users':data}))
-        with open(path, 'w+') as f:  
+        with open(path, 'w') as f:  
             f.write(json.dumps({'users':data}, separators=(',',':')))
 
         
@@ -84,15 +84,15 @@ class Bot:
 
 
     def add_channel(self, user, channel):
-        params = {'chat_id': channel}
-        response = requests.post(self.URL.format(user.token, 'getChat'), params)
+        params = {'chat_id': channel, 'user_id': user.token.split(':')[0]}
+        response = requests.post(self.URL.format(user.token, 'getChatMember'), params)
         if response.json()['ok']:
             user.add_channel(channel)
             user.state='video_adding'
             self.send_msg(user._id, 'Chat successfully added. Now you can send me a video')
             self.serialize('users.json')
         else:
-            self.send_msg(user._id, 'There is no such chat or your bot are not in it.')
+            self.send_msg(user._id, 'There is no such chat or your bot are not admin in it.')
         
 
     def sleep(self, user, command):
