@@ -27,8 +27,8 @@ class Bot:
 
     def deserialize(self, path):
         if os.path.isfile(path):
-            json.load(open(path, 'rb'))
-            for user in json['users']:
+            data = json.load(open(path, 'rb'))
+            for user in data['users']:
                 self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
         else:
             print('xyi')
