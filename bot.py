@@ -38,8 +38,8 @@ class Bot:
         data = []
         for user in self.users:
             data.append(self.users[user].to_json())
-        print(data)
-        json.dumps({'users':data}, separators=(',',':'))
+        print(str({'users':data}))
+        json.dumps(str({'users':data}), separators=(',',':'))
         with open(path, 'w') as f:  
             f.write(json)
 
