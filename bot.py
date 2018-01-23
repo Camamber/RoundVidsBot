@@ -111,7 +111,7 @@ class Bot:
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
                 if response.json()['ok']:
                     filename=self.download_file(response.json()['result']['file_path'])
-                    print(self.round_it(user, file))
+                    print(self.round_it(user, filename))
                     if os.path.isfile(filename):
                         os.remove(filename)
             elif document['width']!= document['width']:
