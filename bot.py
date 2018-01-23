@@ -86,7 +86,7 @@ class Bot:
     def add_channel(self, user, channel):
         params = {'chat_id': channel, 'user_id': user.token.split(':')[0]}
         response = requests.post(self.URL.format(user.token, 'getChatMember'), params)
-        if response.json()['ok']:
+        if response.json()['ok'] and response.json()['result']['status']=='administrator':
             user.add_channel(channel)
             user.state='video_adding'
             self.send_msg(user._id, 'Chat successfully added. Now you can send me a video')
