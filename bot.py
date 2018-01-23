@@ -1,6 +1,7 @@
 from user import User
 import json
 import requests
+import os.path
 
 class Bot:
     TOKEN = ''
@@ -13,6 +14,9 @@ class Bot:
         self.TOKEN=TOKEN
         print('Hi. I`m ready')
 
+    def __del__(self):
+        self.serialize('users.json')
+
     def update(self, json_string):
         data = json.loads(json_string)
         print('------------------------------\n',data,'\n------------------------------')
@@ -23,11 +27,28 @@ class Bot:
             else:
                 self.new_user(data)         
 
+    def deserialize(self, path):
+        if os.path.isfile(path):
+            json.load(open(path, 'rb'))
+            for user in json['users']:
+                self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
+            
+
+    def serialize(self, path):
+        if os.path.isfile(path):
+            os.remove(path)
+        data = []
+        for user in self.users:
+            data.append(user.to_json)
+        json.dumps({'users':data}, separators=(',',':'))
+        with open(path, 'w') as f:  
+            f.write(json)
+
+        
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
         response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
         return response
-
 
 
     def exec_command(self, user, command):
@@ -88,7 +109,7 @@ class Bot:
                 params = {'file_id': document['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
                 if response.json()['ok']:
-                    print(self.round_it(user, self.download_file(response.json()['result']['file_path'])))
+                    print(self.round_it(user, self.download_file(response.json()['result']['file_path'])))                
             elif document['width']!= document['width']:
                 self.send_msg(user._id, 'Video shoud be scaled 1:1')
             elif document['duration']>60:
