@@ -168,7 +168,7 @@ class Bot:
         if response.json()['ok']:
             file={'video_note': self.download_file(response.json()['result']['file_path'])}
             params = {'chat_id': query['data']}
-            response = requests.post(self.URL.format(user.TOKEN,'sendVideoNote'),files=file, data=params)
+            response = requests.post(self.URL.format(user.token,'sendVideoNote'),files=file, data=params)
         return response
 
         
