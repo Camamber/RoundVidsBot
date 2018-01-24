@@ -162,7 +162,7 @@ class Bot:
 ### POST VIDEO SECTION ###
     
     def post_video(self, query):
-        user = users[query['from']['id']]
+        user = self.users[query['from']['id']]
         params = {'chat_id': query['data'],'video_note':query['message']['video_note']['file_id']}
         response = requests.post(self.URL.format(user.token,'sendVideoNote'), data=params)
         return response
