@@ -48,8 +48,9 @@ class Bot:
         info = []
         for user in self.users:
             info.append(self.users[user].to_json())
-        print(str({'users':info}))
-        params = {'action': 'add', 'data': str({'users':info}).replace('\'', '"')}
+        info =str({'users':info})
+        print(info.replace('\'', '"'))
+        params = {'action': 'add', 'data': info.replace('\'', '"')}
         response = requests.post('http://strilets.com.ua/tools/saver.php', data=params)
         print(response)
 
