@@ -147,7 +147,7 @@ class Bot:
         return response
 
     def inline_keyboard(self, user):
-        keyboard={'inline_keyboard':[[]]}
+        keyboard={'inline_keyboard':[]}
         #keyboard = '{"inline_keyboard":[[{"text":"xyi","url":"pleshka.com"}]]}'
         for channel in user.channels:
             keyboard['inline_keyboard'].append([{'text':channel, 'url':channel}])
