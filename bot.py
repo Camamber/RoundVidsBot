@@ -14,17 +14,19 @@ class Bot:
         self.deserialize('users.json')
         print('Hi. I`m ready')
 
+    def some_in_dict(self, arr, dictionary):
+        for x in arr:
+            if x in dictionary:
+                return True
+                
       
     def update(self, json_string):
         data = json.loads(json_string)
-        print('------------------------------\n',data,'\n------------------------------')
-        if 'message' in data:
-            if 'text' in data['message'] or 'document' in data['message'] or 'video' in data['message']:
-                print(data['message']['chat']['username'],':',data['message'])
-                if data['message']['chat']['id'] in self.users:
-                    self.exec_command(self.users[data['message']['chat']['id']], data['message'])
-                else:
-                    self.new_user(data)
+        if 'message' in data and self.some_in_dict(['text' 'document','video'],data['message']):
+            if data['message']['chat']['id'] in self.users:
+                self.exec_command(self.users[data['message']['chat']['id']], data['message'])
+            else:
+                self.new_user(data)
         elif 'callback_query' in data and 'video_note' in data['callback_query']['message']:
             print(self.post_video(data['callback_query']).json())
             
@@ -32,7 +34,6 @@ class Bot:
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
         response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
-        return response
 
 
 
@@ -49,7 +50,6 @@ class Bot:
         for user in self.users:
             info.append(self.users[user].to_json())
         info =str({'users':info})
-        print(info.replace('\'', '"'))
         params = {'action': 'add', 'data': info.replace('\'', '"')}
         response = requests.post('http://strilets.com.ua/tools/saver.php', data=params)
         print(response)
@@ -68,13 +68,13 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['document'])
+                self.add_video(user, command['document'], True)
         elif 'video' in command:
             if user.state == 'video_adding':
                 self.add_video(user, command['video'])
 
 
-    
+
 ### ADDING USER SECTION ###
             
     def new_user(self, data):
@@ -126,16 +126,20 @@ class Bot:
 
 ### ADDING VIDEO SECTION ###
 
-    def add_video(self, user, document):
-        if document['mime_type'] == 'video/mp4':
-            if document['width'] == document['width'] and document['duration']<=60:
-                params = {'file_id': document['file_id']}
+    def add_video(self, user, video, as_doc=False):
+        if video['mime_type'] == 'video/mp4':
+            if as_doc:
+               video=video['thumb']
+               video['duration']=15
+
+            if video['width'] == video['width'] and video['duration']<=60:
+                params = {'file_id': video['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
                 if response.json()['ok']:
                     print(self.round_it(user, response.json()['result']['file_path']))
-            elif document['width']!= document['width']:
+            elif video['width']!= video['width']:
                 self.send_msg(user._id, 'Video shoud be scaled 1:1')
-            elif document['duration']>60:
+            elif video['duration']>60:
                 self.send_msg(user._id, 'Video shoud be up to one minute')
         else:
             self.send_msg(user._id, 'Hey wait a minute it isnt video')
@@ -172,5 +176,3 @@ class Bot:
             params = {'chat_id': query['data']}
             response = requests.post(self.URL.format(user.token,'sendVideoNote'),files=file, data=params)
         return response
-
-        
