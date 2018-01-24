@@ -22,9 +22,11 @@ class Bot:
       
     def update(self, json_string):
         data = json.loads(json_string)
+        print(data)
+        print(Y)
         if 'message' in data and self.some_in_dict(['text' 'document','video'],data['message']):
             if data['message']['chat']['id'] in self.users:
-                print(Y)
+                
                 self.exec_command(self.users[data['message']['chat']['id']], data['message'])
             else:
                 self.new_user(data)
