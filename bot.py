@@ -18,12 +18,16 @@ class Bot:
     def update(self, json_string):
         data = json.loads(json_string)
         print('------------------------------\n',data,'\n------------------------------')
-        if 'text' in data['message'] or 'document' in data['message'] or 'video' in data['message']:
-            print(data['message']['chat']['username'],':',data['message'])
-            if data['message']['chat']['id'] in self.users:
-                self.exec_command(self.users[data['message']['chat']['id']], data['message'])
-            else:
-                self.new_user(data)
+        if 'message' in data:
+            if 'text' in data['message'] or 'document' in data['message'] or 'video' in data['message']:
+                print(data['message']['chat']['username'],':',data['message'])
+                if data['message']['chat']['id'] in self.users:
+                    self.exec_command(self.users[data['message']['chat']['id']], data['message'])
+                else:
+                    self.new_user(data)
+        elif 'callback_query' in data and 'video_note' in data['callback_query']:
+            self.post_video(data['callback_query'])
+            
 
     def send_msg(self, chat, text):
         params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
@@ -141,18 +145,26 @@ class Bot:
         return r.content
     
     def round_it(self,user, file_path):
-        file={'video_note': self.download_file(file_path), 'reply_markup':self.inline_keyboard(user)}
-        params = {'chat_id': user._id}
+        file={'video_note': self.download_file(file_path)}
+        params = {'chat_id': user._id, 'reply_markup':self.inline_keyboard(user)}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
 
     def inline_keyboard(self, user):
         keyboard={'inline_keyboard':[]}
-        #keyboard = '{"inline_keyboard":[[{"text":"xyi","url":"pleshka.com"}]]}'
         for channel in user.channels:
-            keyboard['inline_keyboard'].append([{'text':channel, 'url':'pleshka.com'}])
+            keyboard['inline_keyboard'].append([{'text':channel, 'callback_data':channel}])
         print(str(keyboard).replace('\'', '"'))
         return str(keyboard).replace('\'', '"')
-            
 
-### ADDING VIDEO SECTION ###
+
+
+### POST VIDEO SECTION ###
+    
+    def post_video(self, query):
+        user = users[query['from']['id']]
+        params = {'chat_id': query['data'],'video_note':query['message']['video_note']['file_id']}
+        response = requests.post(self.URL.format(user.token,'sendVideoNote'), data=params)
+        return response
+
+        
