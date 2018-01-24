@@ -23,7 +23,8 @@ class Bot:
     def update(self, json_string):
         data = json.loads(json_string)
         print(data)
-        print('X')
+        print('message' in data)
+        print(self.some_in_dict(['text' 'document','video'],data['message']))
         if 'message' in data and self.some_in_dict(['text' 'document','video'],data['message']):
             if data['message']['chat']['id'] in self.users:
                 print('Y')
