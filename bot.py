@@ -163,8 +163,12 @@ class Bot:
     
     def post_video(self, query):
         user = self.users[query['from']['id']]
-        params = {'chat_id': query['data'],'video_note':query['message']['video_note']['file_id']}
-        response = requests.post(self.URL.format(user.token,'sendVideoNote'), data=params)
+        params = {'file_id': query['message']['video_note']['file_id']}
+        response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
+        if response.json()['ok']:
+            file={'video_note': self.download_file(response.json()['result']['file_path'])}
+            params = {'chat_id': query['data']}
+            response = requests.post(self.URL.format(user.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
 
         
