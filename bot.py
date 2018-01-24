@@ -24,6 +24,7 @@ class Bot:
         data = json.loads(json_string)
         if 'message' in data and self.some_in_dict(['text' 'document','video'],data['message']):
             if data['message']['chat']['id'] in self.users:
+                print(Y)
                 self.exec_command(self.users[data['message']['chat']['id']], data['message'])
             else:
                 self.new_user(data)
@@ -68,10 +69,11 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
+                print(I)
                 self.add_video(user, command['document'], True)
         elif 'video' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['video'])
+                self.add_video(user, command['video'], False)
 
 
 
@@ -126,7 +128,7 @@ class Bot:
 
 ### ADDING VIDEO SECTION ###
 
-    def add_video(self, user, video, as_doc=False):
+    def add_video(self, user, video, as_doc):
         print(video)
         if video['mime_type'] == 'video/mp4':
             if as_doc:
