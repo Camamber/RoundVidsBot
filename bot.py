@@ -22,12 +22,8 @@ class Bot:
       
     def update(self, json_string):
         data = json.loads(json_string)
-        print(data)
-        print('message' in data)
-        print(self.some_in_dict(['text' 'document','video'],data['message']))
-        if 'message' in data and self.some_in_dict(['text' 'document','video'],data['message']):
+        if 'message' in data and self.some_in_dict(['text', 'document','video'],data['message']):
             if data['message']['chat']['id'] in self.users:
-                print('Y')
                 self.exec_command(self.users[data['message']['chat']['id']], data['message'])
             else:
                 self.new_user(data)
@@ -72,7 +68,6 @@ class Bot:
                 self.sleep(user, command['text'])
         elif 'document' in command:
             if user.state == 'video_adding':
-                print('I')
                 self.add_video(user, command['document'], True)
         elif 'video' in command:
             if user.state == 'video_adding':
@@ -138,11 +133,10 @@ class Bot:
                video['thumb']['file_id'] =video['file_id']
                video=video['thumb']
                video['duration']=15
-            print(video)
+
             if video['width'] == video['width'] and video['duration']<=60:
                 params = {'file_id': video['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
-                print('xyi')
                 if response.json()['ok']:
                     print(self.round_it(user, response.json()['result']['file_path']))
             elif video['width']!= video['width']:
