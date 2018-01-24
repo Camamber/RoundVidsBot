@@ -127,6 +127,7 @@ class Bot:
 ### ADDING VIDEO SECTION ###
 
     def add_video(self, user, video, as_doc=False):
+        print(video)
         if video['mime_type'] == 'video/mp4':
             if as_doc:
                video['thumb']['file_id'] =video['file_id']
