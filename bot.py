@@ -39,7 +39,7 @@ class Bot:
 ### SERIALIZING-DESERIALIZING SECTION ###
 
     def deserialize(self, path):
-        data = requests.get('http://strilets.com.ua/tools/{0}'.format(path)).json()
+        data = jrequests.get('http://strilets.com.ua/tools/{0}'.format(path)).json()
         for user in data['users']:
             self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
     
@@ -49,7 +49,7 @@ class Bot:
         for user in self.users:
             info.append(self.users[user].to_json())
         print(str({'users':info}))
-        params = {'action': 'add', 'data': str({'users':info})}
+        params = {'action': 'add', 'data': str({'users':info}).replace('\'', '"'))}
         response = requests.post('http://strilets.com.ua/tools/saver.php', data=params)
         print(response)
 
