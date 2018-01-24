@@ -136,6 +136,7 @@ class Bot:
             if video['width'] == video['width'] and video['duration']<=60:
                 params = {'file_id': video['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
+                print('xyi')
                 if response.json()['ok']:
                     print(self.round_it(user, response.json()['result']['file_path']))
             elif video['width']!= video['width']:
