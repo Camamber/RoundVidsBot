@@ -39,18 +39,19 @@ class Bot:
 ### SERIALIZING-DESERIALIZING SECTION ###
 
     def deserialize(self, path):
-        if os.path.isfile(path):
-            data = json.load(open(path, 'rb'))
-            for user in data['users']:
-                self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
+        data = json.loads(requests.get('http://strilets.com.ua/tools/{0}'.format(path), data=params))
+        for user in data['users']:
+            self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
+    
 
     def serialize(self, path):
-        data = []
+        info = []
         for user in self.users:
-            data.append(self.users[user].to_json())
-        print(str({'users':data}))
-        with open(path, 'w') as f:  
-            f.write(json.dumps({'users':data}, separators=(',',':')))
+            info.append(self.users[user].to_json())
+        print(str({'users':info}))
+        params = {'action': 'add', 'data': str({'users':info})}
+        response = requests.post('http://strilets.com.ua/tools/saver.php', data=params)
+        print(response)
 
 
 
