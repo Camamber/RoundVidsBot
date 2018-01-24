@@ -4,13 +4,9 @@ from bot import Bot
 
 API_TOKEN = '456472998:AAGuE397SZVFgX5JIV022BFe6XQzzdDn_7Q'
 
-WEBHOOK_HOST = '<ip/host where the bot is running>'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
-WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
-
-WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
+WEBHOOK_LISTEN = '0.0.0.0'  
 WEBHOOK_URL_PATH = "/%s/" % (API_TOKEN)
-
 
 class WebhookServer(object):
     @cherrypy.expose
@@ -23,9 +19,7 @@ class WebhookServer(object):
             print(json_string)
             bot.update(json_string)
         else:
-            #return 'xui'
             raise cherrypy.HTTPError(403)
-
 
 config = {
     'global': {
@@ -33,5 +27,6 @@ config = {
         'server.socket_port': int(os.environ.get('PORT', WEBHOOK_PORT)),
     }
 }
+
 bot = Bot(API_TOKEN)
 cherrypy.quickstart(WebhookServer(), WEBHOOK_URL_PATH, config=config)

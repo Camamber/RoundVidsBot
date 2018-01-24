@@ -4,16 +4,16 @@ import requests
 import os.path
 
 class Bot:
+
     TOKEN = ''
     URL = 'https://api.telegram.org/bot{0}/{1}'
-
-    state= False
     users = {};
 
     def __init__(self, TOKEN):
         self.TOKEN=TOKEN
         self.deserialize('users.json')
         print('Hi. I`m ready')
+
       
     def update(self, json_string):
         data = json.loads(json_string)
@@ -23,16 +23,22 @@ class Bot:
             if data['message']['chat']['id'] in self.users:
                 self.exec_command(self.users[data['message']['chat']['id']], data['message'])
             else:
-                self.new_user(data)         
+                self.new_user(data)
+
+    def send_msg(self, chat, text):
+        params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
+        response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
+        return response
+
+
+
+### SERIALIZING-DESERIALIZING SECTION ###
 
     def deserialize(self, path):
         if os.path.isfile(path):
             data = json.load(open(path, 'rb'))
             for user in data['users']:
                 self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
-        else:
-            print('xyi')
-            
 
     def serialize(self, path):
         data = []
@@ -42,12 +48,9 @@ class Bot:
         with open(path, 'w') as f:  
             f.write(json.dumps({'users':data}, separators=(',',':')))
 
-        
-    def send_msg(self, chat, text):
-        params = {'chat_id': chat, 'text': text, 'parse_mode':'HTML'}
-        response = requests.post(self.URL.format(self.TOKEN,'sendMessage'), data=params)
-        return response
 
+
+### LOGIC SECTION ###
 
     def exec_command(self, user, command):
         if 'text' in command:
@@ -63,7 +66,10 @@ class Bot:
         elif 'video' in command:
             if user.state == 'video_adding':
                 self.add_video(user, command['video'])
-            
+
+
+    
+### ADDING USER SECTION ###
             
     def new_user(self, data):
         if 'text' in data['message'] and data['message']['text'] == '/start':
@@ -72,6 +78,9 @@ class Bot:
         else:
             self.send_msg(data['message']['chat']['id'], 'Idk who are you man. Try /start to config me:)')
 
+
+
+### ADDING TOKEN SECTION ###
 
     def add_token(self, user, token):
         response = requests.post(self.URL.format(token, 'getMe'))
@@ -83,6 +92,9 @@ class Bot:
             self.send_msg(user._id, 'Incorrect token. Try again.')
 
 
+
+### ADDING CHANNEL SECTION ###
+            
     def add_channel(self, user, channel):
         params = {'chat_id': channel, 'user_id': user.token.split(':')[0]}
         response = requests.post(self.URL.format(user.token, 'getChatMember'), params)
@@ -93,7 +105,10 @@ class Bot:
             self.serialize('users.json')
         else:
             self.send_msg(user._id, 'There is no such chat or your bot are not admin in it.')
-        
+
+
+
+### SLEEPING SECTION ###        
 
     def sleep(self, user, command):
         if command == '/token':
@@ -101,6 +116,9 @@ class Bot:
         elif command == '/channels':
             user.state='channel_adding'
 
+
+
+### ADDING VIDEO SECTION ###
 
     def add_video(self, user, document):
         if document['mime_type'] == 'video/mp4':
@@ -119,20 +137,11 @@ class Bot:
     def download_file(self, file_path):
         filename = file_path.split('/')[-1]
         url = 'https://api.telegram.org/file/bot{0}/{1}'
-        r = requests.get(url.format(self.TOKEN,file_path))
-        #with open(filename, 'wb') as f:  
-        #    f.write(r.content)
-        #return filename
+        r = requests.get(url.format(self.TOKEN,file_path))       
         return r.content
     
     def round_it(self,user, file_path):
-        filename = self.download_file(file_path)
-        file={'video_note': filename}
-        #file={'video_note': open(filename, 'rb')}
-        #if os.path.isfile(filename):
-        #    print('lol')
-        #    os.remove(filename)
+        file={'video_note': self.download_file(file_path)}
         params = {'chat_id': user._id}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
-        
