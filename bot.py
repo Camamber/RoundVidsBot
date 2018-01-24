@@ -132,7 +132,7 @@ class Bot:
                video['thumb']['file_id'] =video['file_id']
                video=video['thumb']
                video['duration']=15
-
+            print(video)
             if video['width'] == video['width'] and video['duration']<=60:
                 params = {'file_id': video['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
