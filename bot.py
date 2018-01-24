@@ -149,5 +149,3 @@ class Bot:
 
 
 ### ADDING VIDEO SECTION ###
-
-    def post_video(self, user, document):
