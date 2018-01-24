@@ -39,7 +39,7 @@ class Bot:
 ### SERIALIZING-DESERIALIZING SECTION ###
 
     def deserialize(self, path):
-        data = json.loads(requests.get('http://strilets.com.ua/tools/{0}'.format(path), data=params))
+        data = requests.get('http://strilets.com.ua/tools/{0}'.format(path)).json()
         for user in data['users']:
             self.users[user['id']]=User(user['id'],user['state'],user['token'],user['channels'])
     
