@@ -22,7 +22,7 @@ class Bot:
       
     def update(self, json_string):
         data = json.loads(json_string)
-        if 'message' in data and self.some_in_dict(['text', 'document','video'],data['message']):
+        if 'message' in data and self.some_in_dict(['text','video'],data['message']):
             if data['message']['chat']['id'] in self.users:
                 self.exec_command(self.users[data['message']['chat']['id']], data['message'])
             else:
@@ -66,12 +66,9 @@ class Bot:
                 self.add_channel(user, command['text'])
             elif user.state == 'sleep':
                 self.sleep(user, command['text'])
-        elif 'document' in command:
-            if user.state == 'video_adding':
-                self.add_video(user, command['document'], True)
         elif 'video' in command:
             if user.state == 'video_adding':
-                self.add_video(user, command['video'], False)
+                self.add_video(user, command['video'])
 
 
 
@@ -126,14 +123,8 @@ class Bot:
 
 ### ADDING VIDEO SECTION ###
 
-    def add_video(self, user, video, as_doc):
-        print(video)
+    def add_video(self, user, video):
         if video['mime_type'] == 'video/mp4':
-            if as_doc:
-               video['thumb']['file_id'] =video['file_id']
-               video=video['thumb']
-               video['duration']=15
-
             if video['width'] == video['width'] and video['duration']<=60:
                 params = {'file_id': video['file_id']}
                 response = requests.post(self.URL.format(self.TOKEN, 'getFile'), params)
@@ -146,17 +137,20 @@ class Bot:
         else:
             self.send_msg(user._id, 'Hey wait a minute it isnt video')
 
+
     def download_file(self, file_path):
         filename = file_path.split('/')[-1]
         url = 'https://api.telegram.org/file/bot{0}/{1}'
         r = requests.get(url.format(self.TOKEN,file_path))       
         return r.content
+
     
     def round_it(self,user, file_path):
         file={'video_note': self.download_file(file_path)}
         params = {'chat_id': user._id, 'reply_markup':self.inline_keyboard(user)}
         response = requests.post(self.URL.format(self.TOKEN,'sendVideoNote'),files=file, data=params)
         return response
+
 
     def inline_keyboard(self, user):
         keyboard={'inline_keyboard':[]}
