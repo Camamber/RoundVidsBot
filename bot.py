@@ -25,7 +25,7 @@ class Bot:
                     self.exec_command(self.users[data['message']['chat']['id']], data['message'])
                 else:
                     self.new_user(data)
-        elif 'callback_query' in data and 'video_note' in data['callback_query']:
+        elif 'callback_query' in data and 'video_note' in data['callback_query']['message']:
             print(self.post_video(data['callback_query']).json())
             
 
