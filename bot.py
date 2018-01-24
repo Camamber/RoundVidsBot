@@ -129,6 +129,7 @@ class Bot:
     def add_video(self, user, video, as_doc=False):
         if video['mime_type'] == 'video/mp4':
             if as_doc:
+               video['thumb']['file_id'] =video['file_id']
                video=video['thumb']
                video['duration']=15
 
