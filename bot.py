@@ -116,6 +116,7 @@ class Bot:
     def sleep(self, user, command):
         elif command == '/channels':
             user.state='channel_adding'
+            self.send_msg(user._id, 'Lets add more channels. Simply type <b>valid</b> @channelname')
         elif command == '/clear':
             self.users.pop(user._id, None)
             self.send_msg(user._id, 'Who are you? Have I seen you before? Maybe try /start :smirk:')
