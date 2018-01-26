@@ -60,9 +60,11 @@ class Bot:
 
     def exec_command(self, user, command):
         if 'text' in command:
-            if user.state == 'token_adding':
+            if command['text'] == '/cancel' and user.state != 'token_adding' and user.state != 'channel_adding':
+                user.state='sleep'
+            elif user.state == 'token_adding':
                 self.add_token(user, command['text'])
-            elif user.state == 'channel_adding':
+            elif user.state == 'channel_adding' or user.state == 'channels_adding':
                 self.add_channel(user, command['text'])
             elif user.state == 'sleep':
                 self.sleep(user, command['text'])
@@ -115,7 +117,7 @@ class Bot:
 
     def sleep(self, user, command):
         if command == '/channels':
-            user.state='channel_adding'
+            user.state='channels_adding'
             self.send_msg(user._id, 'Lets add more channels. Simply type <b>valid</b> @channelname')
         elif command == '/clear':
             self.users.pop(user._id, None)
