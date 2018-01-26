@@ -67,7 +67,7 @@ class Bot:
             elif user.state == 'sleep':
                 self.sleep(user, command['text'])
         elif 'video' in command:
-            if user.state == 'video_adding':
+            if user.state == 'sleep':
                 self.add_video(user, command['video'])
 
 
@@ -103,7 +103,7 @@ class Bot:
         response = requests.post(self.URL.format(user.token, 'getChatMember'), params)
         if response.json()['ok'] and response.json()['result']['status']=='administrator':
             user.add_channel(channel)
-            user.state='video_adding'
+            user.state='sleep'
             self.send_msg(user._id, 'Chat successfully added. Now you can send me a video')
             self.serialize('users.json')
         else:
@@ -114,10 +114,13 @@ class Bot:
 ### SLEEPING SECTION ###        
 
     def sleep(self, user, command):
-        if command == '/token':
-            user.state='token_adding'
         elif command == '/channels':
             user.state='channel_adding'
+        elif command == '/clear':
+            self.users.pop(user._id, None)
+            self.send_msg(user._id, 'Who are you? Have I seen you before? Maybe try /start :smirk:')
+        elif command == '/help':
+            self.send_msg(user._id, 'Look what i find\n-Simply send me a video file itry to do smth :movie_camera:\n-Try /channels to add more channels :memo:\n-And /clear to delete you from my life :sob:')
 
 
 
