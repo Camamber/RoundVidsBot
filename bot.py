@@ -114,7 +114,7 @@ class Bot:
 ### SLEEPING SECTION ###        
 
     def sleep(self, user, command):
-        elif command == '/channels':
+        if command == '/channels':
             user.state='channel_adding'
             self.send_msg(user._id, 'Lets add more channels. Simply type <b>valid</b> @channelname')
         elif command == '/clear':
